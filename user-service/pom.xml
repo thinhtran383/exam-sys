@@ -9,7 +9,7 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>product-service</artifactId>
+    <artifactId>user-service</artifactId>
 
     <properties>
         <java.version>17</java.version>
