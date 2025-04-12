@@ -19,6 +19,7 @@
     <modules>
         <module>discovery-server</module>
         <module>api-gateway</module>
+        <module>user-service</module>
     </modules>
 
     <properties>
@@ -27,6 +28,15 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spring-cloud.version>2024.0.1</spring-cloud.version>
     </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+
+    </dependencies>
+
     <dependencyManagement>
         <dependencies>
             <dependency>
