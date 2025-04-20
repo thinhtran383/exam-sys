@@ -1,6 +1,10 @@
 package space.thinhtran.userservice.config;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
+import io.swagger.v3.oas.annotations.security.OAuthFlow;
+import io.swagger.v3.oas.annotations.security.OAuthFlows;
+import io.swagger.v3.oas.annotations.security.OAuthScope;
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
@@ -14,20 +18,12 @@ import java.util.List;
 
 @Configuration
 @OpenAPIDefinition
+@io.swagger.v3.oas.annotations.security.SecurityScheme(name = "oauth2_bearer", type = SecuritySchemeType.OAUTH2,
+        flows = @OAuthFlows(authorizationCode = @OAuthFlow(authorizationUrl
+                = "${springdoc.oauthflow.authorization-url}", tokenUrl = "${springdoc.oauthflow.token-url}", scopes = {
+                @OAuthScope(name = "openid", description = "openid")})))
 public class OpenApiConfig {
-//    @Bean
-//    public OpenAPI userServiceAPI() {
-//        return new OpenAPI()
-//                .servers(List.of(
-//                        new io.swagger.v3.oas.models.servers.Server()
-//                                .url("http://localhost:8080")
-//                                .description("User Service API")
-//                ))
-//                .info(new io.swagger.v3.oas.models.info.Info()
-//                        .title("User Service API")
-//                        .version("1.0.0")
-//                        .description("User Service API documentation"));
-//    }
+
 
     @Bean
     public OpenAPI customOpenAPI() {
