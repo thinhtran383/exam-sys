@@ -27,10 +27,10 @@ public class UserService {
 
     private final Keycloak keycloak;
     private final KeyCloakProperties keyCloakProperties;
-    private final String REALM_NAME = keyCloakProperties.getRealm();
+
 
     public PageResponse<UserResp> getAllUsers(int page, int size) {
-        List<UserRepresentation> users = keycloak.realm(REALM_NAME)
+        List<UserRepresentation> users = keycloak.realm(keyCloakProperties.getRealm())
                 .users()
                 .list(page * size, size);
 
@@ -40,7 +40,7 @@ public class UserService {
                 .map(UserResp::of)
                 .toList();
 
-        long totalElements = keycloak.realm(REALM_NAME).users().count();
+        long totalElements = keycloak.realm(keyCloakProperties.getRealm()).users().count();
 
         int totalPages = (int) Math.ceil((double) totalElements / size);
 
@@ -69,12 +69,11 @@ public class UserService {
         CredentialRepresentation credentialRepresentation = new CredentialRepresentation();
 
 
-
-        @Cleanup Response response = keycloak.realm(REALM_NAME).users().create(newUser);
+        @Cleanup Response response = keycloak.realm(keyCloakProperties.getRealm()).users().create(newUser);
 
         String userId = CreatedResponseUtil.getCreatedId(response);
-        UserResource userResource = keycloak.realm(REALM_NAME).users().get(userId);
-        RoleRepresentation guestRealmRole =  keycloak.realm(REALM_NAME).roles().get("ADMIN").toRepresentation();
+        UserResource userResource = keycloak.realm(keyCloakProperties.getRealm()).users().get(userId);
+        RoleRepresentation guestRealmRole = keycloak.realm(keyCloakProperties.getRealm()).roles().get("ADMIN").toRepresentation();
 
         userResource.roles().realmLevel().add(Collections.singletonList(guestRealmRole));
 
