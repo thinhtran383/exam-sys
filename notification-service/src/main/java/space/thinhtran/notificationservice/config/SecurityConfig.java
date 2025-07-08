@@ -36,6 +36,8 @@ public class SecurityConfig {
                 .cors(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/api/noti/**").permitAll()
+
                         .requestMatchers(HttpMethod.GET,
                                 "/actuator/**",
                                 "/swagger-ui/**",
