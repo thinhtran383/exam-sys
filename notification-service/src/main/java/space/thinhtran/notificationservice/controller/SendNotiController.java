@@ -14,4 +14,9 @@ public class SendNotiController {
     public void sendPrivateNotification(@PathVariable String username, @PathVariable String notification) {
         messagingTemplate.convertAndSendToUser(username, "/queue/notify", notification);
     }
+
+    @GetMapping("/broadcast/{message}")
+    public void sendBroadcast(@PathVariable String message) {
+        messagingTemplate.convertAndSend("/queue/notify", message);
+    }
 }
