@@ -1,4 +1,4 @@
-package space.thinhtran.userservice.config;
+package space.thinhtran.notificationservice.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

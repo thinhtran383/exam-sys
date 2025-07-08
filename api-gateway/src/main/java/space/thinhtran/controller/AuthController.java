@@ -8,6 +8,7 @@ import org.springframework.security.oauth2.client.annotation.RegisteredOAuth2Aut
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+import space.thinhtran.commonmodule.util.AuthenticationUtil;
 import space.thinhtran.dto.UserResponse;
 
 @RestController
@@ -22,6 +23,7 @@ public class AuthController {
         String accessToken = authorizedClient.getAccessToken().getTokenValue();
         String refreshToken = authorizedClient.getRefreshToken().getTokenValue();
         String userId = principal.getPrincipal().getAttribute("sub");
+
 
         return ResponseEntity.ok(
                 UserResponse.builder()

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Test WebSocket STOMP qua Gateway (Log Console)</title>
+    <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
+</head>
+<body>
+<h3>Test WebSocket STOMP qua Gateway (Log Console)</h3>
+<button id="connect">Connect</button>
+<button id="disconnect">Disconnect</button>
+<button id="send-public">Send Public Message</button>
+<button id="send-private">Send Private Message</button>
+<pre id="messages"></pre>
+
+<script>
+    let stompClient = null;
+
+    function setConnected(connected) {
+        document.getElementById('connect').disabled = connected;
+        document.getElementById('disconnect').disabled = !connected;
+        document.getElementById('send-public').disabled = !connected;
+        document.getElementById('send-private').disabled = !connected;
+    }
+
+    document.getElementById('connect').addEventListener('click', function() {
+        const ws = new WebSocket('ws://localhost:8080/ws/notify');
+        stompClient = Stomp.over(ws);
+
+        // Bật debug log
+        stompClient.debug = function(str) {
+            console.log('[STOMP]', str);
+        };
+
+        stompClient.connect({}, function(frame) {
+            setConnected(true);
+            document.getElementById('messages').textContent += 'Connected: ' + frame + '\n';
+            console.log('Connected frame:', frame);
+
+            stompClient.subscribe('/topic/greetings', function(message) {
+                document.getElementById('messages').textContent += '[Broadcast] ' + message.body + '\n';
+                console.log('[Receive /topic/greetings]', message);
+            });
+
+            stompClient.subscribe('/topic/notifications', function(message) {
+                document.getElementById('messages').textContent += '[Notification] ' + message.body + '\n';
+                console.log('[Receive /topic/notifications]', message);
+            });
+
+            stompClient.subscribe('/user/queue/reply', function(message) {
+                document.getElementById('messages').textContent += '[Private Reply] ' + message.body + '\n';
+                console.log('[Receive /user/queue/reply]', message);
+            });
+
+            stompClient.subscribe('/user/queue/notify', function(message) {
+                document.getElementById('messages').textContent += '[Private Notify] ' + message.body + '\n';
+                console.log('[Receive /user/queue/notify]', message);
+            });
+
+        }, function(error) {
+            document.getElementById('messages').textContent += 'Error: ' + error + '\n';
+            console.error('Connection error:', error);
+        });
+    });
+
+    document.getElementById('disconnect').addEventListener('click', function() {
+        if (stompClient !== null) {
+            stompClient.disconnect(() => {
+                document.getElementById('messages').textContent += 'Disconnected\n';
+                console.log('Disconnected from STOMP');
+            });
+        }
+        setConnected(false);
+    });
+
+    document.getElementById('send-public').addEventListener('click', function() {
+        if (stompClient && stompClient.connected) {
+            stompClient.send('/app/hello', {}, 'Hello from client (public)');
+            document.getElementById('messages').textContent += 'Sent: Hello from client (public)\n';
+            console.log('[Send] /app/hello: Hello from client (public)');
+        }
+    });
+
+    document.getElementById('send-private').addEventListener('click', function() {
+        if (stompClient && stompClient.connected) {
+            stompClient.send('/app/private', {}, 'Hello from client (private)');
+            document.getElementById('messages').textContent += 'Sent: Hello from client (private)\n';
+            console.log('[Send] /app/private: Hello from client (private)');
+        }
+    });
+</script>
+</body>
+</html>

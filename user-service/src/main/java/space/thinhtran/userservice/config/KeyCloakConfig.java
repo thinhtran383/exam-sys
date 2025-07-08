@@ -6,7 +6,6 @@ import org.keycloak.admin.client.KeycloakBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import static org.keycloak.OAuth2Constants.CLIENT_CREDENTIALS;
 import static org.keycloak.OAuth2Constants.PASSWORD;
 
 @Configuration
@@ -23,7 +22,6 @@ public class KeyCloakConfig {
                 .username(keyCloakProperties.getUsername())
                 .password(keyCloakProperties.getPassword())
                 .clientId(keyCloakProperties.getClientId())
-//                .clientSecret(keyCloakProperties.getClientSecret())
                 .build();
     }
 

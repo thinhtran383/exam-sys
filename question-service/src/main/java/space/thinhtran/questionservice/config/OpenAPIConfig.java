@@ -1,4 +1,4 @@
-package space.thinhtran.userservice.config;
+package space.thinhtran.questionservice.config;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
@@ -17,13 +17,7 @@ import org.springframework.context.annotation.Configuration;
 import java.util.List;
 
 @Configuration
-@OpenAPIDefinition
-@io.swagger.v3.oas.annotations.security.SecurityScheme(name = "oauth2_bearer", type = SecuritySchemeType.OAUTH2,
-        flows = @OAuthFlows(authorizationCode = @OAuthFlow(authorizationUrl
-                = "${springdoc.oauthflow.authorization-url}", tokenUrl = "${springdoc.oauthflow.token-url}")))
-public class OpenApiConfig {
-
-
+public class OpenAPIConfig {
     @Bean
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
